@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Видео-промпты · 24.online</title>
+<style>
+:root{--bg:#f6f6f4;--panel:#fff;--line:#e4e4e0;--line2:#d2d2cc;--text:#161616;--dim:#6d6d68;--accent:#FCCA2E;--ink:#161616;--cell:#fbfbfa;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--panel:#1c1c1c;--line:#2c2c2c;--line2:#3a3a3a;--text:#f2f2f0;--dim:#9a9a96;--cell:#181818}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+header{padding:28px 24px 18px}
+h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.02em}
+.sub{margin-top:4px;color:var(--dim);font-size:13px}
+.brand{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:1px}
+.wrap{overflow-x:auto;padding:0 24px 48px}
+table{border-collapse:separate;border-spacing:0;width:100%}
+th{position:sticky;top:0;z-index:2;background:var(--bg);text-align:left;font-weight:600;font-size:12px;color:var(--dim);padding:8px 10px;border-bottom:1px solid var(--line2)}
+td{vertical-align:top;padding:12px 10px;border-bottom:1px solid var(--line)}
+.main{width:150px;height:150px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.main img,.g img{width:100%;height:100%;object-fit:contain;cursor:zoom-in;display:block}
+.link{max-width:220px}
+.chip{display:inline-block;border:1px solid var(--line2);border-radius:6px;padding:2px 6px;color:var(--text);text-decoration:none;font-size:12px}
+a.chip:hover{border-color:var(--accent)}
+.host{color:var(--dim);font-size:12px;margin-left:6px}
+.title{margin-top:8px;font-size:12px;color:var(--dim)}
+.gal{display:grid;grid-template-columns:repeat(3,72px);gap:6px}
+.g{position:relative;width:72px;height:72px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.g .n{position:absolute;left:3px;bottom:2px;font-size:10px;color:#555;background:rgba(255,255,255,.85);border-radius:4px;padding:0 3px}
+.vid{position:relative;width:170px;height:226px;border-radius:10px;background:#000;isolation:isolate}
+.vid video{width:100%;height:100%;object-fit:contain;display:block;border-radius:10px}
+.vempty{width:170px;height:226px;border-radius:10px;border:1px dashed var(--line2);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:12px}
+.ctl{position:absolute;bottom:6px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;padding:0;display:flex;align-items:center;justify-content:center}
+.ctl:hover{background:rgba(0,0,0,.85)}
+.ctl.on{background:var(--accent);color:var(--ink)}
+.ctl svg{width:16px;height:16px}
+.ctl.snd{left:6px}.ctl.pp{left:40px}.ctl.fs{right:6px}
+.prompt{min-width:300px;max-width:420px}
+.ptext{white-space:pre-wrap;font-size:13px;line-height:1.5;background:var(--cell);border:1px solid var(--line);border-radius:10px;padding:10px;max-height:226px;overflow:auto}
+.pbar{margin-top:6px;font-size:12px}
+.pbar button{border:0;background:none;padding:0;color:var(--dim);text-decoration:underline;text-underline-offset:2px}
+.pbar button:hover{color:var(--text)}
+.muted{color:var(--dim)}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(12,12,12,.96);display:none;perspective:1600px;overflow:hidden;user-select:none}
+.lb.open{display:block}
+.lb-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d}
+.lb-item{position:absolute;transition:transform .5s cubic-bezier(.2,.75,.2,1),opacity .5s,filter .5s;cursor:pointer}
+.lb-item img{width:100%;height:100%;object-fit:contain;background:#fff;border-radius:14px;box-shadow:0 40px 90px rgba(0,0,0,.55);display:block;-webkit-user-drag:none}
+.lb-bar{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));text-align:center;color:#f2f2f0;font-size:13px}
+.lb-bar span{color:#9a9a96;margin-left:10px}
+.lb-btn{position:absolute;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;padding:0}
+.lb-btn:hover{background:rgba(255,255,255,.22)}
+.lb-btn svg{width:20px;height:20px}
+.lb-close{top:calc(20px + env(safe-area-inset-top,0px));right:20px}.lb-prev{left:24px;top:50%;margin-top:-22px}.lb-next{right:24px;top:50%;margin-top:-22px}
+@media (prefers-reduced-motion:reduce){.lb-item{transition:none}}
+@media (max-width:900px){
+  header{padding:20px 16px 10px}
+  .wrap{padding:0 16px 40px}
+  table,tbody,tr,td{display:block;width:100%}
+  thead{display:none}
+  tr{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:14px;margin-bottom:16px}
+  td{border:0;padding:6px 0}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--dim);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+  .link,.prompt{max-width:none;min-width:0}
+  .main{width:100%;height:auto;aspect-ratio:1}
+  .gal{grid-template-columns:repeat(3,1fr)}.g{width:auto;height:auto;aspect-ratio:1}
+  .vid,.vempty{width:100%;height:auto;aspect-ratio:9/12}
+  .lb-prev,.lb-next{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="brand"></span>Видео-промпты</h1>
+  <div class="sub" id="sub"></div>
+</header>
+<div class="wrap"><table><thead><tr id="head"></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="lb" id="lb" role="dialog" aria-label="Просмотр фото">
+  <div class="lb-stage" id="lbStage"></div>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Предыдущее"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Следующее"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="lb-bar"><b id="lbTitle"></b><span id="lbCount"></span></div>
+</div>
+<script>
+const DATA = {"rows": [{"url": "https://www.amazon.com/Bulova-Mens-Marine-Star-98A226/dp/B07PGHH1JM/ref=sr_1_14?dib=eyJ2IjoiMSJ9.lJS8dF-4WpXK7mJr4UbxVjjUxooltsSLUjjB9QFQbmgjPgRHQxP3INhTRduRJy05eqPWE0n41o-ggc_7gserZCbPB4xdx82owKG0qQ9kREezuugaKpF1WllEwQyDf5f6EJc0ov_qlNqJ1j5a-sXKNAf2QqBhZTU5LG_FAOZF4H_9LpLyH5iPscVrIpvTrJ0hhrm3r5CVXJFSHoyGsYiS5HsuCchMDxvI7Rhi0RWucpcqTvOZCee4xNKJ3CU6SJwj9X_aOl-efkFwLIaCUdXHaOWHA75Y7Z10re8AqeluXoY.kXzecdb3HAZ5aB0pRpLOteR44RCDPyalXDLQZUoAW88&dib_tag=se&keywords=luxury+watches+for+men&qid=1790250170&sr=8-14", "asin": "B07PGHH1JM", "host": "amazon.com", "title": "Bulova Men's Marine Star 'Series A' Automatic Watch with Orange Silicone Strap Style: 98A226", "main": "m0", "gallery": ["m1", "m2", "m3", "m4"], "video": "m5", "p1": "Generate a professional product character sheet and technical blueprint for cross-shot continuity.\n\nSubject: Bulova Marine Star \"Series A\" Automatic, ref. 98A226, a 45mm stainless steel dive-style wristwatch with a silver-white dial featuring an open aperture at 7 o'clock revealing the automatic movement, alternating grey Roman numeral and baton hour markers, an orange minute track, a small seconds subdial, luminous silver-tone hands, a fixed steel bezel with a grey outer ring, a screw-down crown, and an orange textured silicone strap with a contrasting grey underside and steel tang buckle. All 5 views depict the exact same single product instance with identical colors, proportions, materials and details, rendered at consistent relative scale. Match the attached reference images precisely in every view.\n\nFormat: A single horizontal 16:9 layout on light gray paper (#DDDDDD). The central band contains 5 equal-width product views in one horizontal row, each isolated on a solid black backdrop (#000000). Product only in every view: no hands, props, packaging or stray reflections.\n\nThe 5 views:\n1. \"3/4 L\": three-quarter view from the front left, case angled to catch the light along the polished case flank and the grey bezel ring, orange strap curving away\n2. \"HERO\": straight-on frontal view of the dial, watch upright, orange strap extending above and below\n3. \"SIDE\": clean lateral profile showing the case flank, the screw-down crown, the thickness of the case and bezel, and the orange strap's grey underside\n4. \"BACK\": direct rear view showing the transparent exhibition caseback with the visible automatic movement and rotor, the steel caseback ring, and the grey underside of the strap with the steel tang buckle\n5. \"MACRO\": extreme close-up of the open aperture at 7 o'clock on the silver-white dial, showing the exposed balance wheel and movement parts, the aperture's edge, the adjacent Roman numeral marker and the orange minute track\n\nDocument chrome and labels:\n- Above each view, a clean bold monospace label matching its angle: \"3/4 L\", \"HERO\", \"SIDE\", \"BACK\", \"MACRO\".\n- Top margin header: \"BRAND: BULOVA\" on the top-left, \"CHARACTER SHEET v1\" in the top-center, \"CATEGORY: AUTOMATIC DIVE WATCH\" on the top-right.\n- Below the image row, four technical data blocks with generous spacing and zero text overlap:\n  1. \"COLOR PALETTE\": 4 swatches of the product's dominant colors, each labeled with a hex code: silver-white dial #E6E7E8, stainless steel #B5B8BB, bezel ring grey #5A5E62, strap orange #F26A1B.\n  2. \"MATERIALS\": small square texture swatches labeled \"STAINLESS STEEL\", \"TEXTURED SILICONE\", \"SILVER-WHITE DIAL\", \"MINERAL CRYSTAL\".\n  3. \"DIMENSIONS (MM)\": CASE DIAMETER 45, THICKNESS 13.45, STRAP WIDTH 24.\n  4. \"MODEL CODE\": CODE, SKU, SEASON, DATE, values shown as \"-\" placeholders.\n\nAll printed text sharp, high contrast, correctly spelled, nothing truncated or overlapping. Be literal about every text element on the dial, bezel and caseback: reproduce the Bulova logo, wordmark and all dial text exactly as they appear in the reference images, and do not improvise any wording.\n\nAesthetic and render quality: photorealistic high-end studio product photography, three-point softbox lighting for even illumination across all angles, gentle rim light separating the steel silhouette and orange strap from the black backdrop, soft grounding shadows where the backdrop tone allows, 100mm macro lens sharpness, ultra-high resolution, absolute clean line work and frame purity.\n\nHyper-detailed, photorealistic. Sport automatic dive watch editorial.", "p2": "", "source": ""}, {"url": "https://www.amazon.ae/adidas-Court-White-Women-Shoes/dp/B0CSDXFB75/ref=sr_1_8?crid=GZL1L6BIQ023&dib=eyJ2IjoiMSJ9.-AYz9BMbr5DfDZ-Go4R5fhqrS1UW1VLapKP0HqRPZV7pf6kBYp7hxE3jHg6B6n1h6bTwUxo-x6NJieKj49vZ4Gatjzmhz3dhYarb6YMtJ07tFIS7i2sgjdmauVgnrJS7YcCLxovSSZX3ssc60M3K-CrbGPhstlvoWRsaodFMEVvdIH6CLwSJiT95V46j8ZxeWhoPZPb4irnBclJ969FWZ3fvXcI4S-BdXiwmF3zFT1w71hRxGI8K9C4Y4ky26OWwYjWx7WKARuhLdenAFlPw2EuFiEb-D8mwNAWJIn7Ilqo.w2a4N-tXiDrmQJRXURNxxmvdWij0BgfAVMszw8Xk72A&dib_tag=se&keywords=sneakers&qid=1790245956&sprefix=sneakers%2Caps%2C165&sr=8-8&th=1&psc=1", "asin": "B0CSDXFB75", "host": "amazon.ae", "title": "adidas VL COURT BASE SHOES womens SHOES - LOW (NON FOOTBALL)", "main": "m6", "gallery": ["m7", "m8", "m9", "m10", "m11"], "video": "m12", "p1": "You are a luxury product video director writing Seedance 2.5 prompts.\n\nINPUT\nI will attach one or more images of a single pair of shoes. Study them\ncarefully before writing anything.\n\nSTEP 1 - PRODUCT READ (output as a short bullet list, max 8 lines)\nFrom the images, identify:\n- Shoe type and silhouette (sneaker, loafer, heel, boot, etc.)\n- Exact colorway, including tonal variations and any contrast panels\n- Upper material and finish (smooth calfskin, suede, patent, knit,\n  canvas, exotic, matte vs glossy)\n- Signature brand detail: logo, emblem, monogram, plaque, buckle,\n  stripe, or heel tab. This is the hook of the video.\n- Secondary details worth a macro shot: stitching, perforations,\n  broguing, eyelets, laces, welt, hardware finish\n- Sole and midsole construction, tread pattern, edge paint, heel shape\n- Any asymmetry or a side that reads best on camera\n\nIf a detail is not visible in the images, say so and do not invent it.\n\nSTEP 2 - SHOT PLAN (output as a table: Shot | Timestamp | Description)\nFormat is locked: 15 seconds, 6 shots, 2.5 seconds each, hard jump\ncuts only, no transitions, no text overlays.\n\nSetting is locked for every shot: a seamless pure white studio\ncyclorama, infinity cove, no visible horizon line, no props, no\nfurniture, no hands, no people, no background objects. The shoe rests\non or floats above a clean white surface. Only soft grounded contact\nshadow and gentle gradient falloff are allowed.\n\nThe 6 beats:\n1. HOOK. Extreme macro push-in on the signature brand detail, frame\n   filled edge to edge, hard raking key light catching the material or\n   hardware.\n2. SILHOUETTE. Full side profile, medium shot, shoe upright on white,\n   camera arcs slowly across it to reveal the complete outline.\n3. TEXTURE. Extreme macro on the upper material and stitching, side\n   raking light carving out grain and thread ridges, camera near static\n   with a micro drift.\n4. TOP-DOWN. Bird's eye view, shoe flat on white, laces or straps\n   arranged deliberately, soft even overhead light, slow zoom out.\n5. UNDERSIDE. Low angle from below or the shoe slowly rotating in\n   mid-air, revealing the outsole tread and midsole stack, dramatic\n   under-lighting with a crisp rim edge.\n6. HERO. Definitive three-quarter beauty shot at eye level, centered on\n   white, soft-box key with subtle rim separation, static hold with an\n   ultra-slow push-in.\n\nBefore you present the table, silently check that every shot differs\nfrom every other shot across at least 3 of these 5 dimensions: camera\nangle, subject distance, focus element, camera movement, lighting mood.\nReplace any shot that fails this check.\n\nSTEP 3 - SEEDANCE 2.5 PROMPT\nOutput a settings line, then the prompt inside a code block.\n\nSettings: Model: Seedance 2.5 | Quality: 1080p | Aspect ratio: 9:16 |\nRuntime: 15s | 6 shots, jump cuts only\nAttach: the product images as @Image1 (and @Image2 etc. if multiple).\n\nThe prompt must follow this exact skeleton:\n\n  Opening line: product category campaign video, 15 seconds, 6 shots,\n  hard jump cuts only, no transitions. Then one sentence naming the\n  product with its real materials and colorway, referenced via @Image1.\n  Then a consistency lock: keep the product design, colorway, material\n  finish, and hardware identical across every shot. Then: clean pure\n  white seamless studio background throughout, no props, no people.\n\n  Six timestamped blocks: [00:00] [00:02.5] [00:05] [00:07.5] [00:10]\n  [00:12.5]. Each block states which reference image or panel to use,\n  the framing, the subject and what is in focus, the lighting setup, and\n  one primary camera movement. Present tense. One movement per shot.\n\n  Closing style anchor: cinematic, photorealistic, high-end footwear\n  campaign, minimalist studio product cinematography, shot on a macro\n  prime lens, shallow depth of field, high-key lighting, pure white\n  background, [the product's real colors]. No distortion. Maintain\n  product proportions, stitching count, and logo placement throughout.\n  Steady motion, clean color grade, no text, no watermark.\n\nWRITING RULES\n- Describe what IS in frame, never what is absent, except for the\n  explicit background and constraint locks above.\n- Every camera move gets a degree adverb: slowly, gently, ultra-slowly.\n- Use real photographic vocabulary: raking light, soft-box key, rim\n  light, macro prime, shallow depth of field, contact shadow.\n- Name materials precisely. Not \"leather\" but \"polished black calfskin\".\n- Keep the prompt body between 180 and 280 words.\n- Do not add music, voiceover, captions, or logos as text.\n\nThen give me a 3 line note on which shot is most likely to fail and what\nto change first if it does.\n\nWait for my images before producing anything.", "p2": "Sneaker campaign video, 15 seconds, 6 shots, hard jump cuts only, no transitions. The product is the low-top court sneaker from @Image1: smooth white leather upper, three matte black stripes, off-white suede toe cap, white flat laces, black adidas wordmark on the tongue, dark brown gum rubber cupsole. Keep the product design, colorway, material finish, and hardware identical across every shot. Clean pure white seamless studio background throughout, no props, no people.\n\n[00:00] Reference @Image4. Extreme macro on the three black stripes, stripe edges and stitching filling the frame. Hard raking key from the left. Camera slowly pushes in.\n\n[00:02.5] Reference @Image4. Medium lateral profile, sneaker upright on white, soft contact shadow, full outline sharp. Soft-box key from above. Camera gently arcs from toe to heel.\n\n[00:05] Reference @Image1. Extreme macro on the seam where the off-white suede toe cap meets the smooth upper, suede nap and stitch line in focus. Low side raking light. Camera ultra-slowly drifts right.\n\n[00:07.5] Reference @Image2. Bird's-eye view, sneaker flat on white, laces neatly tied, tongue wordmark centered. Soft even overhead light. Camera slowly zooms out.\n\n[00:10] Reference @Image3. Low angle from below, sneaker gently rotating in mid-air, gum cupsole sidewall and heel tread in focus. Dramatic under-lighting with crisp rim edge. Camera stays locked.\n\n[00:12.5] Reference @Image1. Three-quarter beauty shot at eye level, sneaker centered on white. Soft-box key with subtle rim separation. Static hold, ultra-slow push-in.\n\nCinematic, photorealistic, high-end footwear campaign, minimalist studio product cinematography, shot on a macro prime lens, shallow depth of field, high-key lighting, pure white background, white, black and gum brown palette. No distortion. Maintain product proportions, stitching count, and logo placement throughout. Steady motion, clean color grade, no text, no watermark.", "source": "https://app.notion.com/p/White-Studio-Shoe-Reel-Master-Prompt-Guide-3bb2d6d190a181d59b0bc58ed44f6a83"}, {"url": "https://www.amazon.ae/Rosefinch-Professional-Ballroom-Practice-Performance/dp/B09PBRLD3D/ref=sr_1_18?_encoding=UTF8&content-id=amzn1.sym.b9d08113-948b-4720-9fee-4236c88627ce&dib=eyJ2IjoiMSJ9.SG0YM1Kh7KyZosc1b_Tr1Y3TATHLWv0-FHDSRwyXmDslTkC8iMH7Xmqv09SddBvdzgQsWOCpSQ9ajsLcpXTkyr6E7A5hg84nUD9JQ_-iAS6HpTU0-ON-0iHVT2dhReL5NQbJsZzt7iv0hYnD3HyfiesBkhA6VkJZvdE9lYOPYSfd1mlJXD5gs0gLf3hXV2v6qF7NzwnGRglnLCOEfr3xLQ9C38gvE0Y9EUt8elVW5QZOlVZOPMKcfS6m7-r_X1-xy82DBZTYhPdUGMALoM8iG09uGOC03IogTYMsVfEnM10.0nW44PP-2dNUv23g8X3_4BRD6RUs677ar6qrMppao1A&dib_tag=se&pd_rd_r=127b7f16-d731-4667-9a96-ff7c167236d9&pd_rd_w=LFvLO&pd_rd_wg=TdrhC&qid=1790229698&refinements=p_n_prime_domestic%3A20642115031%7C20642116031&rnid=20642114031&s=apparel&sr=1-18&th=1&psc=1", "asin": "B09PBRLD3D", "host": "amazon.ae", "title": "Rosefinch Women's", "main": "m13", "gallery": ["m14", "m15", "m16", "m17", "m18", "m19", "m20", "m21", "m22"], "video": "", "p1": "", "p2": "", "source": ""}, {"url": "https://www.amazon.ae/TXYJJP-Strawberry-Cropped-Cardigan-Aesthetic/dp/B0BK258FNW/ref=sr_1_12?crid=1NR1X0S5BJ763&dib=eyJ2IjoiMSJ9.0rXai2fn2PgkxJD2eEWqBie8ajEHawGeyKIdJ_zzw8TtIZsjSk3d-hkREou-BytzNdu7Yri-gFkEiuTRMRtmyXsMWsZRR9irhtiLJss0TVsG8tCCh0dAuR5eKbgEAramFteRXhDH-7rnX3XUwPsvhoiZ7fuEizxeTFj9Wym6TLmGJRGpC2C5JCbw60qAFHzMPfBbw73miFmBa488gZQlE704n89sCs-F4rI4aU4LRLsSc8Km3ArC8PVt7_WyxiN1BGi-fgBV8e4RLBrXpEB78jMDua7nRYXaowqhvBleI8E.r_1ZAdurw6_WiUsKBJ8T83u3ARZPC8IaNIMz8LG8KXg&dib_tag=se&keywords=knitted+top&qid=1790229567&sprefix=knitted+top%2Caps%2C224&sr=8-12", "asin": "B0BK258FNW", "host": "amazon.ae", "title": "Womens Kawaii Strawberry Knit Cropped Sweater Cute Cardigan Aesthetic for Teen Girls Floral Y2k Korean School Uniform Jacket", "main": "m23", "gallery": ["m24", "m25", "m26", "m27", "m28", "m29"], "video": "", "p1": "", "p2": "", "source": ""}], "date": "24.09.2026"};
+const MEDIA = {"m0": "media/c41c8c17029e/01_main.jpg", "m1": "media/c41c8c17029e/02.jpg", "m2": "media/c41c8c17029e/03.jpg", "m3": "media/c41c8c17029e/04.jpg", "m4": "media/c41c8c17029e/05.jpg", "m5": "media/c41c8c17029e/video.mp4", "m6": "media/c9d260d6347f/01_main.jpg", "m7": "media/c9d260d6347f/02.jpg", "m8": "media/c9d260d6347f/03.jpg", "m9": "media/c9d260d6347f/04.jpg", "m10": "media/c9d260d6347f/05.jpg", "m11": "media/c9d260d6347f/06.jpg", "m12": "media/c9d260d6347f/video.mp4", "m13": "media/52c4349eaa3a/01_main.jpg", "m14": "media/52c4349eaa3a/02.jpg", "m15": "media/52c4349eaa3a/03.jpg", "m16": "media/52c4349eaa3a/04.jpg", "m17": "media/52c4349eaa3a/05.jpg", "m18": "media/52c4349eaa3a/06.jpg", "m19": "media/52c4349eaa3a/07.jpg", "m20": "media/52c4349eaa3a/08.jpg", "m21": "media/52c4349eaa3a/09.jpg", "m22": "media/52c4349eaa3a/10.jpg", "m23": "media/49675e562b90/01_main.jpg", "m24": "media/49675e562b90/02.jpg", "m25": "media/49675e562b90/03.jpg", "m26": "media/49675e562b90/04.jpg", "m27": "media/49675e562b90/05.jpg", "m28": "media/49675e562b90/06.jpg", "m29": "media/49675e562b90/07.jpg"};
+const $ = s => document.querySelector(s);
+const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+const cache = {};
+function src(k) {
+  if (!k || !MEDIA[k]) return "";
+  if (cache[k]) return cache[k];
+  const d = MEDIA[k];
+  if (d.startsWith("data:video")) { // blob URLs play reliably in Safari, data: URLs don't
+    const [h, b] = d.split(","); const bin = atob(b); const a = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+    return cache[k] = URL.createObjectURL(new Blob([a], { type: h.slice(5, h.indexOf(";")) }));
+  }
+  return cache[k] = d;
+}
+const I = {
+  muted: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="m22 9-6 6M16 9l6 6"/></svg>',
+  sound: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+  full: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>'
+};
+const rows = DATA.rows;
+const n = rows.length;
+$("#sub").textContent = "24.online · " + n + " " + ["товар", "товара", "товаров"][(n % 10 === 1 && n % 100 !== 11) ? 0 : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 1 : 2] + " · " + DATA.date;
+const hasP1 = rows.some(r => r.p1), hasP2 = rows.some(r => r.p2);
+const cols = [["Main image"], ["Товар"], ["Галерея"], ["Видео"]];
+if (hasP1) cols.push(["Промпт 1 · паспорт продукта"]);
+if (hasP2) cols.push(["Промпт 2 · видео"]);
+const hasSrc = rows.some(r => r.source);
+if (hasSrc) cols.push(["Source"]);
+for (const [c] of cols) $("#head").append(el("th", "", c));
+
+rows.forEach((d, ri) => {
+  const tr = el("tr");
+  const tdM = el("td"); tdM.dataset.l = "Main image";
+  const m = el("div", "main"); if (d.main) { const img = el("img"); img.src = src(d.main); img.alt = d.title || "Main"; img.loading = "lazy"; img.onclick = () => openLB(ri, 0); m.append(img); } tdM.append(m);
+  const tdL = el("td", "link"); tdL.dataset.l = "Товар";
+  if (d.asin) { const a = el("a", "chip"); a.textContent = d.asin; a.href = d.url; a.target = "_blank"; a.rel = "noopener"; tdL.append(a); tdL.append(el("span", "host", d.host)); }
+  else if (d.url) { const a = el("a", "chip", "Ссылка"); a.href = d.url; a.target = "_blank"; a.rel = "noopener"; tdL.append(a); }
+  if (d.title) { const t = el("div", "title"); t.textContent = d.title; tdL.append(t); }
+  const tdG = el("td"); tdG.dataset.l = "Галерея"; const gal = el("div", "gal");
+  d.gallery.forEach((k, i) => { const g = el("div", "g"); const img = el("img"); img.src = src(k); img.alt = "Фото " + (i + 1); img.loading = "lazy"; img.onclick = () => openLB(ri, (d.main ? 1 : 0) + i); g.append(img, el("span", "n", String(i + 1))); gal.append(g); });
+  if (!d.gallery.length) gal.append(el("span", "muted", "—"));
+  tdG.append(gal);
+  const tdV = el("td"); tdV.dataset.l = "Видео";
+  if (d.video) {
+    const box = el("div", "vid"); const v = el("video");
+    for (const a of ["muted", "autoplay", "loop", "playsinline"]) v.setAttribute(a, "");
+    v.muted = true; v.preload = "auto"; v.src = src(d.video);
+    v.addEventListener("loadeddata", () => v.play().catch(() => {}));
+    const snd = el("button", "ctl snd", I.muted); snd.setAttribute("aria-label", "Звук");
+    const pp = el("button", "ctl pp", I.pause); pp.setAttribute("aria-label", "Пауза");
+    const fs = el("button", "ctl fs", I.full); fs.setAttribute("aria-label", "Во весь экран");
+    const syncS = () => { snd.innerHTML = v.muted ? I.muted : I.sound; snd.classList.toggle("on", !v.muted); };
+    snd.onclick = () => { if (v.muted) document.querySelectorAll("video").forEach(o => { if (o !== v && !o.muted) { o.muted = true; o.dispatchEvent(new Event("volumechange")); } }); v.muted = !v.muted; if (v.paused) v.play().catch(() => {}); };
+    v.addEventListener("volumechange", syncS);
+    const syncP = () => { pp.innerHTML = v.paused ? I.play : I.pause; };
+    v.addEventListener("play", syncP); v.addEventListener("pause", syncP);
+    pp.onclick = () => v.paused ? v.play().catch(() => {}) : v.pause();
+    v.onclick = () => v.paused ? v.play().catch(() => {}) : v.pause();
+    fs.onclick = () => { const go = v.requestFullscreen || v.webkitRequestFullscreen || v.webkitEnterFullscreen; if (go) Promise.resolve(go.call(v)).catch(() => v.webkitEnterFullscreen?.()); };
+    box.append(v, snd, pp, fs); tdV.append(box);
+  } else tdV.append(el("div", "vempty", "Видео в работе"));
+  tr.append(tdM, tdL, tdG, tdV);
+  const mkP = (text, label) => {
+    const td = el("td", "prompt"); td.dataset.l = label;
+    if (!text) { td.append(el("span", "muted", "—")); return td; }
+    const p = el("div", "ptext"); p.textContent = text;
+    const bar = el("div", "pbar"); const b = el("button", "", "Копировать");
+    b.onclick = async () => { try { await navigator.clipboard.writeText(text); b.textContent = "Скопировано"; } catch { b.textContent = "Не удалось"; } setTimeout(() => b.textContent = "Копировать", 1500); };
+    bar.append(b); td.append(p, bar); return td;
+  };
+  if (hasP1) tr.append(mkP(d.p1, "Промпт 1 · паспорт продукта"));
+  if (hasP2) tr.append(mkP(d.p2, "Промпт 2 · видео"));
+  if (hasSrc) {
+    const td = el("td", "prompt"); td.dataset.l = "Source"; td.style.minWidth = "180px";
+    if (!d.source) td.append(el("span", "muted", "—"));
+    else {
+      const t = el("div", "title"); t.style.marginTop = "0"; t.style.whiteSpace = "pre-wrap";
+      d.source.split(/(https?:\/\/\S+)/).forEach(part => { if (/^https?:\/\//.test(part)) { const a = el("a"); a.href = part; a.target = "_blank"; a.rel = "noopener"; a.textContent = part.replace(/^https?:\/\/(www\.)?/, ""); a.style.color = "var(--text)"; a.style.wordBreak = "break-all"; t.append(a); } else t.append(document.createTextNode(part)); });
+      td.append(t);
+    }
+    tr.append(td);
+  }
+  $("#tb").append(tr);
+});
+
+const LB = { imgs: [], cur: 0, items: [] };
+function openLB(ri, index) {
+  const d = rows[ri]; LB.imgs = [d.main, ...d.gallery].filter(Boolean); if (!LB.imgs.length) return;
+  LB.cur = Math.max(0, Math.min(index, LB.imgs.length - 1));
+  $("#lbTitle").textContent = d.asin || "";
+  const st = $("#lbStage"); st.innerHTML = "";
+  LB.items = LB.imgs.map((k, i) => { const it = el("div", "lb-item"); const img = el("img"); img.src = src(k); img.alt = ""; it.append(img); it.onclick = () => { if (i !== LB.cur) go(i); }; st.append(it); return it; });
+  $("#lb").classList.add("open"); document.body.style.overflow = "hidden"; layout();
+}
+function closeLB() { $("#lb").classList.remove("open"); document.body.style.overflow = ""; }
+function go(i) { LB.cur = Math.max(0, Math.min(i, LB.imgs.length - 1)); layout(); }
+function layout() {
+  const W = Math.min(innerWidth * (innerWidth < 900 ? 0.78 : 0.55), innerHeight * 0.72);
+  LB.items.forEach((it, i) => {
+    const o = i - LB.cur, a = Math.abs(o), s = Math.sign(o);
+    it.style.width = it.style.height = W + "px";
+    it.style.transform = o === 0 ? "translateZ(0)" : `translateX(${s * (W * 0.62 + (a - 1) * W * 0.2)}px) translateZ(${-W * 0.45 - a * 30}px) rotateY(${-s * 55}deg)`;
+    it.style.zIndex = String(100 - a); it.style.opacity = a > 4 ? "0" : "1";
+    it.style.filter = o === 0 ? "none" : `brightness(${Math.max(0.35, 0.7 - a * 0.1)})`;
+    it.style.pointerEvents = a > 4 ? "none" : "auto";
+  });
+  $("#lbCount").textContent = `${LB.cur + 1} / ${LB.imgs.length}`;
+  $("#lbPrev").style.visibility = LB.cur > 0 ? "visible" : "hidden";
+  $("#lbNext").style.visibility = LB.cur < LB.imgs.length - 1 ? "visible" : "hidden";
+}
+$("#lbPrev").onclick = () => go(LB.cur - 1); $("#lbNext").onclick = () => go(LB.cur + 1); $("#lbClose").onclick = closeLB;
+$("#lb").addEventListener("click", e => { if (e.target.id === "lb" || e.target.id === "lbStage") closeLB(); });
+document.addEventListener("keydown", e => { if (!$("#lb").classList.contains("open")) return; if (e.key === "Escape") closeLB(); else if (e.key === "ArrowLeft") go(LB.cur - 1); else if (e.key === "ArrowRight") go(LB.cur + 1); });
+let wl = 0; $("#lb").addEventListener("wheel", e => { e.preventDefault(); const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (Math.abs(d) < 8 || Date.now() < wl) return; wl = Date.now() + 280; go(LB.cur + Math.sign(d)); }, { passive: false });
+let tx = null; $("#lb").addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive: true });
+$("#lb").addEventListener("touchend", e => { if (tx == null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) go(LB.cur - Math.sign(dx)); tx = null; });
+addEventListener("resize", () => { if ($("#lb").classList.contains("open")) layout(); });
+</script>
+</body>
+</html>
